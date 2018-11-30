@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.rubrica.certificate.ec.securitydata;
+package io.rubrica.certificate.sv.ecp;
 
 import java.security.KeyStore;
 import java.security.KeyStore.PrivateKeyEntry;
@@ -25,10 +25,13 @@ import java.util.List;
 
 import io.rubrica.certificate.CrlUtils;
 import io.rubrica.certificate.ValidationResult;
+import io.rubrica.certificate.sv.ecp.CertificadoEntidadCertificacionPresidencia;
+import io.rubrica.certificate.sv.ecp.CertificadoEntidadCertificacionPresidenciaFactory;
+import io.rubrica.certificate.sv.ecp.EntidadCertificacionPresidenciaSubCert;
 import io.rubrica.util.CertificateUtils;
 import io.rubrica.util.OcspUtils;
 
-public class TestSecurityDataCertificate {
+public class TestEntidadCertificacionPresidenciaCertificate {
 
 	private static final String CERT_PATH = "PRUEBA_FPUBLICO_RARGUELLO.p12";
 	private static final String CERT_PASS = "12345678";
@@ -42,19 +45,19 @@ public class TestSecurityDataCertificate {
 				new KeyStore.PasswordProtection(CERT_PASS.toCharArray()));
 
 		X509Certificate cert = (X509Certificate) pke.getCertificate();
-		boolean esSD = CertificadoSecurityDataFactory.esCertificadoDeSecurityData(cert);
-		System.out.println("Es SD? " + esSD);
+		boolean esECP = CertificadoEntidadCertificacionPresidenciaFactory.esCertificadoEntidadCertificacionPresidencia(cert);
+		System.out.println("Es EntidadCertificacionPresidencia? " + esECP);
 		System.setProperty("jsse.enableSNIExtension", "false");
 
-		CertificadoSecurityData certSD = CertificadoSecurityDataFactory.construir(cert);
-		System.out.println("nombres=" + certSD.getNombres());
+		CertificadoEntidadCertificacionPresidencia certECP = CertificadoEntidadCertificacionPresidenciaFactory.construir(cert);
+//		System.out.println("nombres=" + certECP.getNombres());
 
 		for (String url : CertificateUtils.getCrlDistributionPoints(cert)) {
 			System.out.println("url=" + url);
 		}
 
 		// new SecurityDataCaCert().getPublicKey()
-		ValidationResult result = CrlUtils.verifyCertificateCRLs(cert, new SecurityDataSubCaCert().getPublicKey(),
+		ValidationResult result = CrlUtils.verifyCertificateCRLs(cert, new EntidadCertificacionPresidenciaSubCert().getPublicKey(),
 				Arrays.asList(
 						"https://direct.securitydata.net.ec/~crl/autoridad_de_certificacion_sub_security_data_entidad_de_certificacion_de_informacion_curity_data_s.a._c_ec_crlfile.crl"));
 		System.out.println("Validation result: " + result);

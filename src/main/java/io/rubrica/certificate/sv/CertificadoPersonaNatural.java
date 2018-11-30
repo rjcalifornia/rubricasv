@@ -14,8 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package io.rubrica.certificate.ec;
+package io.rubrica.certificate.sv;
 
 /**
  * Certificado que identifica al suscriptos como una persona natural o fisica, y
@@ -23,51 +22,52 @@ package io.rubrica.certificate.ec;
  * dentro del ambito de su actividad y limites de uso que correspondan.
  *
  * @author Ricardo Arguello <ricardo.arguello@soportelibre.com>
+ * @author Misael Fernández <misael.fernandez.correa@gmail.com>
  */
 public interface CertificadoPersonaNatural {
 
-	/**
-	 * Cedula o Pasaporte
-	 */
-	String getCedulaPasaporte();
+    /**
+     * Cedula o Pasaporte
+     */
+    String getCedulaPasaporte();
 
-	/**
-	 * Nombre(s)
-	 */
-	String getNombres();
+    /**
+     * Nombre(s)
+     */
+    String getNombres();
 
-	/**
-	 * Primer apellido
-	 */
-	String getPrimerApellido();
+    /**
+     * Primer apellido
+     */
+    String getPrimerApellido();
 
-	/**
-	 * Segundo apellido (si no tiene queda en blanco)
-	 */
-	String getSegundoApellido();
+    /**
+     * Segundo apellido (si no tiene queda en blanco)
+     */
+    String getSegundoApellido();
 
-	/**
-	 * Direccion
-	 */
-	String getDireccion();
+    /**
+     * Direccion
+     */
+    String getDireccion();
 
-	/**
-	 * Telefono
-	 */
-	String getTelefono();
+    /**
+     * Telefono
+     */
+    String getTelefono();
 
-	/**
-	 * Ciudad
-	 */
-	String getCiudad();
+    /**
+     * Ciudad
+     */
+    String getCiudad();
 
-	/**
-	 * Pais
-	 */
-	String getPais();
+    /**
+     * Pais
+     */
+    String getPais();
 
-	/**
-	 * RUC (si no tiene queda en blanco)
-	 */
-	String getRuc();
+    /**
+     * RUC (si no tiene queda en blanco)
+     */
+    String getRuc();
 }

@@ -23,6 +23,12 @@
 			<organization>Soporte Libre</organization>
 			<organizationUrl>http://www.soportelibre.com</organizationUrl>
 		</developer>
+		<developer>
+			<name>Misael Fernández</name>
+			<email>misael.fernandez.correa@gmail.com</email>
+			<organization>Subsecretaría de Gobierno Electrónico</organization>
+			<organizationUrl>https://www.firmadigital.gob.ec/</organizationUrl>
+		</developer>
 	</developers>
 
 	<scm>

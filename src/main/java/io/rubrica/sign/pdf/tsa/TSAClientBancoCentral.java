@@ -21,7 +21,7 @@ import com.lowagie.text.pdf.TSAClient;
 
 /**
  * Implementacion de cliente TSA para utilizar el servidor de Time Stamping del
- * Banco Central del Ecuador.
+ * Entidad de Certificación de Presidencia.
  *
  * @author Ricardo Arguello <ricardo.arguello@soportelibre.com>
  * @deprecated

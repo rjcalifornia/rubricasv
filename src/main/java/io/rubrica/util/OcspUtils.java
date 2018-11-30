@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package io.rubrica.util;
 
+import io.rubrica.certificate.sv.ecp.CertificadoEntidadCertificacionPresidenciaFactory;
+import io.rubrica.certificate.sv.ecp.EntidadCertificacionPresidenciaCaCert;
+import io.rubrica.certificate.sv.ecp.EntidadCertificacionPresidenciaSubCert;
 import java.net.SocketTimeoutException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
@@ -38,115 +40,97 @@ import java.util.Set;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import io.rubrica.certificate.ec.bce.BceCaCert;
-import io.rubrica.certificate.ec.bce.BceCaTestCert;
-import io.rubrica.certificate.ec.bce.BceSubCert;
-import io.rubrica.certificate.ec.bce.BceSubTestCert;
-import io.rubrica.certificate.ec.bce.CertificadoBancoCentralFactory;
-import io.rubrica.certificate.ec.securitydata.CertificadoSecurityDataFactory;
-import io.rubrica.certificate.ec.securitydata.SecurityDataCaCert;
-import io.rubrica.certificate.ec.securitydata.SecurityDataSubCaCert;
-import io.rubrica.certificate.ec.securitydata.old.CertificadoSecurityDataOldFactory;
 import io.rubrica.core.RubricaException;
 
+/**
+ * @author Ricardo Arguello <ricardo.arguello@soportelibre.com>
+ * @author Misael Fernández <misael.fernandez.correa@gmail.com>
+ * *
+ */
 public class OcspUtils {
-	static {
-		Security.addProvider(new BouncyCastleProvider());
-	}
 
-	public static boolean isValidCertificate(X509Certificate certificate) throws RubricaException {
-		List<X509Certificate> certs = new ArrayList<X509Certificate>();
-		certs.add(certificate);
+    static {
+        Security.addProvider(new BouncyCastleProvider());
+    }
 
-		if (CertificadoSecurityDataFactory.esCertificadoDeSecurityData(certificate)
-				|| CertificadoSecurityDataOldFactory.esCertificadoDeSecurityDataOld(certificate)) {
-			certs.add(new SecurityDataSubCaCert());
-		} else if (CertificadoBancoCentralFactory.esCertificadoDelBancoCentral(certificate)) {
-			if (CertificadoBancoCentralFactory.estTestCa(certificate)) {
-				certs.add(new BceSubTestCert());
-			} else {
-				certs.add(new BceSubCert());
-			}
-		}
+    public static boolean isValidCertificate(X509Certificate certificate) throws RubricaException {
+        List<X509Certificate> certs = new ArrayList<X509Certificate>();
+        certs.add(certificate);
 
-		// init certification path
-		CertificateFactory cf;
-		try {
-			cf = CertificateFactory.getInstance("X509");
-		} catch (CertificateException e) {
-			throw new RuntimeException(e);
-		}
-		CertPath cp;
-		try {
-			cp = cf.generateCertPath(certs);
-		} catch (CertificateException e) {
-			throw new RuntimeException(e);
-		}
+        if (CertificadoEntidadCertificacionPresidenciaFactory.esCertificadoEntidadCertificacionPresidencia(certificate)) {
+            certs.add(new EntidadCertificacionPresidenciaSubCert());
+        }
 
-		// load the root CA certificates
-		X509Certificate rootCACert1 = new SecurityDataCaCert();
-		X509Certificate rootCACert2 = new BceCaCert();
-		X509Certificate rootCACert3 = new BceCaTestCert();
-		X509Certificate rootCACert4 = new SecurityDataSubCaCert();
+        // init certification path
+        CertificateFactory cf;
+        try {
+            cf = CertificateFactory.getInstance("X509");
+        } catch (CertificateException e) {
+            throw new RuntimeException(e);
+        }
+        CertPath cp;
+        try {
+            cp = cf.generateCertPath(certs);
+        } catch (CertificateException e) {
+            throw new RuntimeException(e);
+        }
 
-		// init root trusted certs
-		TrustAnchor ta1 = new TrustAnchor(rootCACert1, null);
-		TrustAnchor ta2 = new TrustAnchor(rootCACert2, null);
-		TrustAnchor ta3 = new TrustAnchor(rootCACert3, null);
-		TrustAnchor ta4 = new TrustAnchor(rootCACert4, null);
+        // load the root CA certificates
+        X509Certificate rootECPCACert = new EntidadCertificacionPresidenciaCaCert();
+        X509Certificate rootECPSubCert = new EntidadCertificacionPresidenciaSubCert();
 
-		Set<TrustAnchor> trustedCertsSet = new HashSet<TrustAnchor>();
-		trustedCertsSet.add(ta1);
-		trustedCertsSet.add(ta2);
-		trustedCertsSet.add(ta3);
-		trustedCertsSet.add(ta4);
+        // init root trusted certs
+        TrustAnchor taECPCaCert = new TrustAnchor(rootECPCACert, null);
+        TrustAnchor taECPSubCert = new TrustAnchor(rootECPSubCert, null);
 
-		// init PKIX parameters
-		PKIXParameters params;
-		try {
-			params = new PKIXParameters(trustedCertsSet);
-		} catch (InvalidAlgorithmParameterException e) {
-			throw new RuntimeException(e);
-		}
+        Set<TrustAnchor> trustedCertsSet = new HashSet<TrustAnchor>();
+        trustedCertsSet.add(taECPCaCert);
+        trustedCertsSet.add(taECPSubCert);
 
-		params.setRevocationEnabled(false);
+        // init PKIX parameters
+        PKIXParameters params;
+        try {
+            params = new PKIXParameters(trustedCertsSet);
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new RuntimeException(e);
+        }
 
-		// enable OCSP
-		// Security.setProperty("ocsp.enable", "true");
+        params.setRevocationEnabled(false);
 
-		// Activate CRLDP
-		// System.setProperty("com.sun.security.enableCRLDP", "true");
+        // enable OCSP
+        // Security.setProperty("ocsp.enable", "true");
+        // Activate CRLDP
+        // System.setProperty("com.sun.security.enableCRLDP", "true");
+        // perform validation
+        CertPathValidator validator;
+        try {
+            validator = CertPathValidator.getInstance("PKIX");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RubricaException(e);
+        }
 
-		// perform validation
-		CertPathValidator validator;
-		try {
-			validator = CertPathValidator.getInstance("PKIX");
-		} catch (NoSuchAlgorithmException e) {
-			throw new RubricaException(e);
-		}
+        try {
+            CertPathValidatorResult result = validator.validate(cp, params);
+            return true;
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new RubricaException(e);
+        } catch (CertPathValidatorException e) {
+            Reason reason = e.getReason();
+            int index = e.getIndex();
+            System.out.println("reason=" + reason + "; index=" + index);
 
-		try {
-			CertPathValidatorResult result = validator.validate(cp, params);
-			return true;
-		} catch (InvalidAlgorithmParameterException e) {
-			throw new RubricaException(e);
-		} catch (CertPathValidatorException e) {
-			Reason reason = e.getReason();
-			int index = e.getIndex();
-			System.out.println("reason=" + reason + "; index=" + index);
+            Throwable t = e.getCause();
 
-			Throwable t = e.getCause();
+            if (t != null) {
+                System.out.println("Cause=" + t.getClass());
 
-			if (t != null) {
-				System.out.println("Cause=" + t.getClass());
+                if (t instanceof SocketTimeoutException) {
+                    System.out.println("Timeout al ir al OCSP server!");
+                    return false;
+                }
+            }
 
-				if (t instanceof SocketTimeoutException) {
-					System.out.println("Timeout al ir al OCSP server!");
-					return false;
-				}
-			}
-
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 }

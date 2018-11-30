@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package io.rubrica.sign.pdf;
 
 import java.util.Properties;
@@ -24,47 +23,47 @@ import com.lowagie.text.Rectangle;
 
 public class PdfUtil {
 
-	public static final String positionOnPageLowerLeftX = "PositionOnPageLowerLeftX";
-	public static final String positionOnPageLowerLeftY = "PositionOnPageLowerLeftY";
-	public static final String positionOnPageUpperRightX = "PositionOnPageUpperRightX";
-	public static final String positionOnPageUpperRightY = "PositionOnPageUpperRightY";
+    public static final String positionOnPageLowerLeftX = "PositionOnPageLowerLeftX";
+    public static final String positionOnPageLowerLeftY = "PositionOnPageLowerLeftY";
+    public static final String positionOnPageUpperRightX = "PositionOnPageUpperRightX";
+    public static final String positionOnPageUpperRightY = "PositionOnPageUpperRightY";
 
-	private static final Logger logger = Logger.getLogger(PdfUtil.class.getName());
+    private static final Logger logger = Logger.getLogger(PdfUtil.class.getName());
 
-	public static Rectangle getPositionOnPage(Properties extraParams) {
-		if (extraParams == null) {
-			logger.severe("Se ha pedido una posicion para un elemento grafico nulo");
-			return null;
-		}
+    public static Rectangle getPositionOnPage(Properties extraParams) {
+        if (extraParams == null) {
+            logger.severe("Se ha pedido una posicion para un elemento grafico nulo");
+            return null;
+        }
 
-		if (extraParams.getProperty(positionOnPageLowerLeftX) != null
-				&& extraParams.getProperty(positionOnPageLowerLeftY) != null
-				&& extraParams.getProperty(positionOnPageUpperRightX) != null
-				&& extraParams.getProperty(positionOnPageUpperRightY) != null) {
-			try {
-				return new Rectangle(Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftX).trim()),
-						Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftY).trim()),
-						Integer.parseInt(extraParams.getProperty(positionOnPageUpperRightX).trim()),
-						Integer.parseInt(extraParams.getProperty(positionOnPageUpperRightY).trim()));
-			} catch (final Exception e) {
-				logger.severe("Se ha indicado una posicion invalida para la firma: " + e);
-			}
-		}
+        if (extraParams.getProperty(positionOnPageLowerLeftX) != null
+                && extraParams.getProperty(positionOnPageLowerLeftY) != null
+                && extraParams.getProperty(positionOnPageUpperRightX) != null
+                && extraParams.getProperty(positionOnPageUpperRightY) != null) {
+            try {
+                return new Rectangle(Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftX).trim()),
+                        Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftY).trim()),
+                        Integer.parseInt(extraParams.getProperty(positionOnPageUpperRightX).trim()),
+                        Integer.parseInt(extraParams.getProperty(positionOnPageUpperRightY).trim()));
+            } catch (final Exception e) {
+                logger.severe("Se ha indicado una posicion invalida para la firma: " + e);
+            }
+        }
 
-		if (extraParams.getProperty(positionOnPageLowerLeftX) != null
-				&& extraParams.getProperty(positionOnPageLowerLeftY) != null
-				&& extraParams.getProperty(positionOnPageUpperRightX) == null
-				&& extraParams.getProperty(positionOnPageUpperRightY) == null) {
-			try {
-				return new Rectangle(Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftX).trim()),
-						Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftY).trim()),
-						Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftX).trim()) + 110,
-						Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftY).trim()) - 36);
-			} catch (final Exception e) {
-				logger.severe("Se ha indicado una posicion invalida para la firma: " + e);
-			}
-		}
+        if (extraParams.getProperty(positionOnPageLowerLeftX) != null
+                && extraParams.getProperty(positionOnPageLowerLeftY) != null
+                && extraParams.getProperty(positionOnPageUpperRightX) == null
+                && extraParams.getProperty(positionOnPageUpperRightY) == null) {
+            try {
+                return new Rectangle(Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftX).trim()),
+                        Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftY).trim()),
+                        Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftX).trim()) + 110,
+                        Integer.parseInt(extraParams.getProperty(positionOnPageLowerLeftY).trim()) - 36);
+            } catch (final Exception e) {
+                logger.severe("Se ha indicado una posicion invalida para la firma: " + e);
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 }
