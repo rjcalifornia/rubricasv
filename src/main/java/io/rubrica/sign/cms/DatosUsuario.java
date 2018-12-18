@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package io.rubrica.sign.cms;
 
 /**
@@ -25,115 +24,50 @@ package io.rubrica.sign.cms;
  */
 public class DatosUsuario {
 
-	private String nombre;
-	private String apellido;
-	private String institucion = "";
-	private String cargo = "";
-	private String serial;
-	private String fechaFirmaArchivo;
-	private String crl;
-	private String archivo64;
-	private String entidadCertificadora;
-	private String mensaje;
+    private String cedula;
+    private String nombresApellidos;
+    private String fechaFirmaArchivo;
 
-	public DatosUsuario() {
-	}
+    public DatosUsuario(String cedula, String nombresApellidos) {
+        this.cedula = cedula;
+        this.nombresApellidos = nombresApellidos;
+    }
+    
+    public DatosUsuario(String cedula, String nombresApellidos, String fechaFirmaArchivo) {
+        this.cedula = cedula;
+        this.nombresApellidos = nombresApellidos;
+        this.fechaFirmaArchivo = fechaFirmaArchivo;
+    }
 
-	private String cedula;
+    public DatosUsuario() {
+    }
 
-	public String getCedula() {
-		return cedula;
-	}
+    public String getCedula() {
+        return cedula;
+    }
 
-	public void setCedula(String cedula) {
-		this.cedula = cedula;
-	}
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public String getNombresApellidos() {
+        return nombresApellidos;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public void setNombresApellidos(String nombre) {
+        this.nombresApellidos = nombre;
+    }
 
-	public String getApellido() {
-		return apellido;
-	}
+    public String getFechaFirmaArchivo() {
+        return fechaFirmaArchivo;
+    }
 
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
+    public void setFechaFirmaArchivo(String fechaFirmaArchivo) {
+        this.fechaFirmaArchivo = fechaFirmaArchivo;
+    }
 
-	public String getInstitucion() {
-		return institucion;
-	}
-
-	public void setInstitucion(String institucion) {
-		this.institucion = institucion;
-	}
-
-	public String getCargo() {
-		return cargo;
-	}
-
-	public void setCargo(String cargo) {
-		this.cargo = cargo;
-	}
-
-	public String getSerial() {
-		return serial;
-	}
-
-	public void setSerial(String serial) {
-		this.serial = serial;
-	}
-
-	public String getFechaFirmaArchivo() {
-		return fechaFirmaArchivo;
-	}
-
-	public void setFechaFirmaArchivo(String fechaFirmaArchivo) {
-		this.fechaFirmaArchivo = fechaFirmaArchivo;
-	}
-
-	public String getCrl() {
-		return crl;
-	}
-
-	public void setCrl(String crl) {
-		this.crl = crl;
-	}
-
-	public String getArchivo64() {
-		return archivo64;
-	}
-
-	public void setArchivo64(String archivo64) {
-		this.archivo64 = archivo64;
-	}
-
-	public String getEntidadCertificadora() {
-		return entidadCertificadora;
-	}
-
-	public void setEntidadCertificadora(String entidadCertificadora) {
-		this.entidadCertificadora = entidadCertificadora;
-	}
-
-	public String getMensaje() {
-		return mensaje;
-	}
-
-	public void setMensaje(String mensaje) {
-		this.mensaje = mensaje;
-	}
-
-	@Override
-	public String toString() {
-		return "DatosUsuario [nombre=" + nombre + ", apellido=" + apellido + ", institucion=" + institucion + ", cargo="
-				+ cargo + ", serial=" + serial + ", fechaFirmaArchivo=" + fechaFirmaArchivo + ", crl=" + crl
-				+ ", archivo64=" + archivo64 + ", entidadCertificadora=" + entidadCertificadora + ", mensaje=" + mensaje
-				+ ", cedula=" + cedula + "]";
-	}
+    @Override
+    public String toString() {
+        return "DatosUsuario [nombre=" + nombresApellidos + ", fechaFirmaArchivo=" + fechaFirmaArchivo + ", cedula=" + cedula + "]";
+    }
 }

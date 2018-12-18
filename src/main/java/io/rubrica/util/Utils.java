@@ -16,6 +16,7 @@
  */
 package io.rubrica.util;
 
+import io.rubrica.certificate.sv.ecp.EntidadCertificacionPresidenciaSubCert;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -327,12 +328,11 @@ public class Utils {
      * corresponds to the public key of the provided certificate.
      *
      * @param certificate The X509Certificate which is to be checked
-     * @param issuingCertificate The X.509 certificate which holds the public
-     * key corresponding to the private key with which the given certificate
-     * should have been signed
      * @return True, if the verification was successful, false otherwise
+     * @throws java.security.InvalidKeyException
      */
-    public static boolean verifySignature(X509Certificate certificate, X509Certificate issuingCertificate) throws java.security.InvalidKeyException {
+    public static boolean verifySignature(X509Certificate certificate) throws java.security.InvalidKeyException {
+        X509Certificate issuingCertificate = new EntidadCertificacionPresidenciaSubCert();
         X500Principal subject = certificate.getSubjectX500Principal();
         X500Principal expectedIssuerSubject = certificate.getIssuerX500Principal();
         X500Principal issuerSubject = issuingCertificate.getSubjectX500Principal();

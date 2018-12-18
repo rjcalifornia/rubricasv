@@ -42,11 +42,12 @@ import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.util.Store;
 
-import io.rubrica.certificate.sv.CertificadoPersonaNatural;
-import io.rubrica.certificate.sv.ecp.CertificadoEntidadCertificacionPresidencia;
-import io.rubrica.certificate.sv.ecp.CertificadoEntidadCertificacionPresidenciaFactory;
+import io.rubrica.certificate.sv.ecp.EntidadCertificacionPresidenciaSubCert;
 import io.rubrica.core.SignatureVerificationException;
 import io.rubrica.util.BouncyCastleUtils;
+import io.rubrica.util.Utils;
+import static io.rubrica.util.Utils.verifySignature;
+import java.security.InvalidKeyException;
 
 /**
  * Verifica datos CMS.
@@ -109,7 +110,8 @@ public class VerificadorCMS {
                 }
 
                 DatosUsuario datosUsuario = crearDatosUsuario(x509Certificate);
-                datosUsuario.setSerial(x509Certificate.getSerialNumber().toString());
+                datosUsuario.setCedula(Utils.getUID(x509Certificate));
+                datosUsuario.setNombresApellidos(Utils.getCN(x509Certificate));
                 datosUsuario.setFechaFirmaArchivo(fechaFirma);
                 listaDatosUsuario.add(datosUsuario);
             }
@@ -126,17 +128,11 @@ public class VerificadorCMS {
         }
     }
 
-    public DatosUsuario crearDatosUsuario(X509Certificate signingCert) {
+    public DatosUsuario crearDatosUsuario(X509Certificate x509Certificate) throws InvalidKeyException {
         DatosUsuario datosUsuario = new DatosUsuario();
-        CertificadoEntidadCertificacionPresidencia certificadoEntidadCertificacionPresidencia = CertificadoEntidadCertificacionPresidenciaFactory.construir(signingCert);
-
-        if (certificadoEntidadCertificacionPresidencia instanceof CertificadoPersonaNatural) {
-            CertificadoPersonaNatural certificadoPersonaNatural = (CertificadoPersonaNatural) certificadoEntidadCertificacionPresidencia;
-            datosUsuario.setCedula(certificadoPersonaNatural.getCedulaPasaporte());
-            datosUsuario.setNombre(certificadoPersonaNatural.getNombres());
-            datosUsuario.setApellido(certificadoPersonaNatural.getPrimerApellido() + " "
-                    + certificadoPersonaNatural.getSegundoApellido());
-            datosUsuario.setSerial(signingCert.getSerialNumber().toString());
+        if (verifySignature(x509Certificate)) {
+            datosUsuario.setCedula(Utils.getUID(x509Certificate));
+            datosUsuario.setNombresApellidos(Utils.getCN(x509Certificate));
         }
         return datosUsuario;
     }

@@ -131,7 +131,7 @@ public class Main {
         String alias = seleccionarAlias(keyStore);
         PrivateKey key = (PrivateKey) keyStore.getKey(alias, password.toCharArray());
         Certificate[] certChain = keyStore.getCertificateChain(alias);
-        if (verifySignature((X509Certificate) certChain[0], new EntidadCertificacionPresidenciaSubCert())) {
+        if (verifySignature((X509Certificate) certChain[0])) {
             signedPdf = signer.sign(pdf, "SHA1withRSA", key, certChain, params);
             verificarPdf(signedPdf);
             System.out.println("final firma\n-------");
@@ -158,6 +158,7 @@ public class Main {
         if (!singInfos.isEmpty()) {
             System.out.println("UID: " + Utils.getUID(certificado));
             System.out.println("CN: " + Utils.getCN(certificado));
+            System.out.println("ISSUER DN: " + certificado.getIssuerDN().getName());
             for (SignInfo info : singInfos) {
                 System.out.println("Info: " + info);
             }
@@ -177,7 +178,7 @@ public class Main {
                 System.out.println("nombre" + Utils.getCN(certificado));
             }
         }
-        System.out.println(verifySignature(certificado, new EntidadCertificacionPresidenciaSubCert()));
+        System.out.println(Utils.verifySignature(certificado));
         //// VERIFICAR PDF
     }
 
